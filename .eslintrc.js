@@ -31,6 +31,8 @@ module.exports = {
     'react/jsx-filename-extension': 0,
     'no-unused-vars': 1,
     'func-names': 0,
+    semi: [2, "always"],
+
   },
   settings: {
     alias: [
