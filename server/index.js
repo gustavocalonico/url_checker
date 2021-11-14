@@ -8,14 +8,33 @@ const corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
+const fileUrls = [
+  "https://stackoverflow.com",
+  "https://github.com",
+  "https://youtube.com",
+];
+
+const dirUrls = [
+  "https://google.com",
+  "https://coinmarketcap.com",
+  "https://duckduckgo.com",
+];
+
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(pino);
 
 app.get('/api/greeting', cors(corsOptions), (req, res) => {
-  const name = req.query.name || 'World';
+  const { url } = req?.query || '';
   res.setHeader('Content-Type', 'application/json');
-  res.json(JSON.stringify({ greeting: `Hello ${name}!` }));
+
+  if (fileUrls.indexOf(url) !== -1) {
+    res.json(JSON.stringify({ type: 'file' }));
+  } else if (dirUrls.indexOf(url) !== -1) {
+    res.json(JSON.stringify({ type: 'directory' }));
+  } else {
+    res.json(JSON.stringify({ type: 'unknown' }));
+  }
 });
 
 app.listen(3001, () => console.log('Express server is running on localhost:3001'));
