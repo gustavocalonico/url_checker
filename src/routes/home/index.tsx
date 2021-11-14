@@ -1,14 +1,17 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
+import get from 'axios';
 import style from './style.css';
 
 const Home: FunctionalComponent = function () {
+  const url = `${window.location.href.replace('3000', '3001')}api/greeting`;
+
   const domId = 'url_form';
   const [text, setText] = useState('');
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      console.log(text); // Implement the verification here
+    const delayDebounceFn = setTimeout(async () => {
+      const response = await get(url).then((res:any) => JSON.parse(res.data));
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
