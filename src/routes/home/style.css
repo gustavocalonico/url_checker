@@ -10,6 +10,7 @@
 }
 
 .input {
+  width: 30vh;
   min-width: 240px;
   border-style: solid;
   border-width: 2px;
