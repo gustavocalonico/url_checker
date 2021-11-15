@@ -1,7 +1,20 @@
 # url_checker
-Simple application for checking if an Url exists
+Simple application for checking if an Url is valid, and the content type of it. The check for url content is mocked, and can be found in `server/index.js`. You shall test the content type with the mocked urls contained in this file:
 
-# url_checker
+```javascript
+// files
+const fileUrls = [
+  "https://stackoverflow.com",
+  "https://github.com",
+  "https://youtube.com",
+];
+// directories
+const dirUrls = [
+  "https://google.com",
+  "https://coinmarketcap.com",
+  "https://duckduckgo.com",
+];
+```
 
 ## CLI Commands
 *   `npm install`: Installs dependencies
@@ -12,11 +25,9 @@ Simple application for checking if an Url exists
 
 *   `npm run build`: Production-ready build
 
-*   `npm run lint`: Pass TypeScript files using ESLint
+For testing locally, just run `npm install` then `npm run dev`.
 
-*   `npm run test`: Run Jest and Enzyme with
-    [`enzyme-adapter-preact-pure`](https://github.com/preactjs/enzyme-adapter-preact-pure) for
-    your tests
+# Screenshots
 
-
-For detailed explanation on how things work, checkout the [CLI Readme](https://github.com/developit/preact-cli/blob/master/README.md).
+![Home](/screenshots/home.png?raw=true "Home")
+![Url](/screenshots/url.png?raw=true "Url")
