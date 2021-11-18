@@ -16,6 +16,18 @@ const dirUrls = [
 ];
 ```
 
+## Dependencies
+You may need to install `preact-cli` globally to run the application. Just run:
+
+```
+npm install -g preact-cli
+```
+
+Set environment variables:
+```
+cp example.env .env
+```
+
 ## CLI Commands
 *   `npm install`: Installs dependencies
 

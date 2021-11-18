@@ -3,9 +3,15 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
 
+const whitelist = ['http://localhost', 'http://localhost:3000'];
 const corsOptions = {
-  origin: 'http://localhost:3000',
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
 };
 
 const fileUrls = [
