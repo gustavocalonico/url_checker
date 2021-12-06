@@ -1,7 +1,6 @@
 import { FunctionalComponent, h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import get from 'axios';
-import { BsFillFileCheckFill, BsFillFolderFill, BsFillQuestionSquareFill } from 'react-icons/bs';
 import { isUrlValid } from '../../utils/validation';
 import style from './style.css';
 import Loading from '../../components/loading';
@@ -12,17 +11,17 @@ const Home: FunctionalComponent = function () {
 
   const domId = 'url_form';
   const [urlValue, setUrlValue] = useState<string>();
-  const [inputTimeout, setInputTimeout] = useState<any>();
-  // used to check if url is valid and how many were tested
-  const [urlCounter, setUrlCounter] = useState(0);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [linkType, setlinkType] = useState<string>();
 
   // Effect for checking url content
   useEffect(() => {
     const timeout = 500;
+
+    // Debouncing server call
     const debounceTimeout = setTimeout(async () => {
       if (urlValue) {
+        setLoading(true);
         const response = await get(api, { params: { url: urlValue }})
           .then((res:any) => JSON.parse(res.data));
         const { type } = response;
@@ -31,27 +30,20 @@ const Home: FunctionalComponent = function () {
       }
     }, timeout);
     return () => clearTimeout(debounceTimeout);
-  }, [urlCounter]);
+  }, [api, urlValue]);
 
   // When user stops typing, trigger url syntax check.
   // If valid, trigger throttled verification
   const onKeyUp = (value : string) => {
-    clearTimeout(inputTimeout); // Prevent last "onKeyUp" to execute
+    setUrlValue((prevState? : string) => {
+      if (value === prevState) return prevState;
 
-    setInputTimeout(setTimeout(() => {
-      setUrlValue((prevState : string) => {
-        if (value === prevState) return prevState;
-
-        setLoading(true);
-        if (isUrlValid(value)) {
-          setUrlCounter(urlCounter + 1);
-          return value;
-        }
-        setlinkType('invalid');
-        setLoading(false);
-        return prevState;
-      });
-    }, 500));
+      if (isUrlValid(value)) {
+        return value;
+      }
+      setlinkType('invalid');
+      return prevState;
+    });
   };
 
   const onSubmit = (e : h.JSX.TargetedEvent<HTMLFormElement, Event>) => {
@@ -66,7 +58,7 @@ const Home: FunctionalComponent = function () {
           type="text"
           name="url"
           id={domId}
-          onKeyUp={(e) => onKeyUp(e?.target?.value)}
+          onKeyUp={(e) => onKeyUp((e?.target as HTMLInputElement).value)}
           className={style.input}
         />
         {isLoading ? (
